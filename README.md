@@ -90,6 +90,8 @@ This command will:
 4. Run DB migrations and seeders.
 5. Create `back/.env` automatically if missing.
 
+`bootstrap-hosting.sh` works even if `git` is missing: it will download the source archive via `curl`/`wget` as a fallback.
+
 ### Option B — manual commands
 
 ```bash
