@@ -4,12 +4,13 @@ import { Globe } from 'lucide-react';
 const languages = [
   { code: 'fr', label: 'FR', flag: '🇫🇷' },
   { code: 'en', label: 'EN', flag: '🇬🇧' },
+  { code: 'ru', label: 'RU', flag: '🇷🇺' },
 ];
 
 export function LanguageSwitcher() {
   const { i18n } = useTranslation();
 
-  const currentLang = i18n.language?.substring(0, 2) || 'fr';
+  const currentLang = i18n.language?.substring(0, 2) || 'ru';
 
   const handleChange = (langCode: string) => {
     i18n.changeLanguage(langCode);
