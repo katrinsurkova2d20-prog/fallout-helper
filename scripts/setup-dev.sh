@@ -6,12 +6,12 @@ BACK_DIR="$ROOT_DIR/back"
 FRONT_DIR="$ROOT_DIR/front"
 
 if ! command -v npm >/dev/null 2>&1; then
-  echo "❌ npm not found. Install Node.js 22+ first."
+  echo "❌ npm not found. Install Node.js 22+ (or run scripts/bootstrap-hosting.sh which can install Node via nvm)."
   exit 1
 fi
 
 if ! command -v npx >/dev/null 2>&1; then
-  echo "❌ npx not found. Install Node.js 22+ first."
+  echo "❌ npx not found. Install Node.js 22+ (or run scripts/bootstrap-hosting.sh which can install Node via nvm)."
   exit 1
 fi
 
@@ -23,17 +23,23 @@ fi
 
 echo "📦 Installing backend dependencies..."
 cd "$BACK_DIR"
-npm install
+npm install --include=dev
+
+if [[ ! -x "$BACK_DIR/node_modules/.bin/drizzle-kit" || ! -x "$BACK_DIR/node_modules/.bin/tsx" ]]; then
+  echo "ℹ️ Dev tools are missing after npm install (some hostings force production-only install)."
+  echo "ℹ️ Installing required CLI tools locally (without changing package.json)..."
+  npm install --no-save drizzle-kit tsx
+fi
 
 echo "🗄️ Running migrations..."
-npx drizzle-kit migrate
+npm run db:migrate
 
 echo "🌱 Seeding database..."
-npx tsx src/db/seed/index.ts
+npm run db:seed
 
 echo "📦 Installing frontend dependencies..."
 cd "$FRONT_DIR"
-npm install
+npm install --include=dev
 
 echo "✅ Setup complete."
 echo "Run in two terminals:"

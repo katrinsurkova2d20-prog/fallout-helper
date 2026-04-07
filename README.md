@@ -91,6 +91,7 @@ This command will:
 5. Create `back/.env` automatically if missing.
 
 `bootstrap-hosting.sh` works even if `git` is missing: it will download the source archive via `curl`/`wget` as a fallback.
+`setup-dev.sh` installs devDependencies too, and if hosting still forces production-only mode, it auto-installs required CLI tools (`drizzle-kit`, `tsx`) locally.
 
 ### Option B — manual commands
 
@@ -98,16 +99,19 @@ This command will:
 # Backend
 cd back
 cp .env.example .env   # edit DATABASE_URL
-npm install
-npx drizzle-kit migrate
-npx tsx src/db/seed/index.ts
+npm install --include=dev
+npm run db:migrate
+npm run db:seed
 npx tsx src/index.ts
 
 # Frontend (separate terminal)
 cd front
-npm install
+npm install --include=dev
 npm run dev
 ```
+
+If you see `npm: command not found`, install Node.js first (22+).  
+`Option A` script can try to install Node.js automatically via `nvm`.
 
 ### What does `cp .env.example .env` mean?
 
