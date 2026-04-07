@@ -83,9 +83,12 @@ Or with `wget`:
 wget -qO- https://raw.githubusercontent.com/katrinsurkova2d20-prog/fallout-helper/main/scripts/bootstrap-hosting.sh | bash
 ```
 
+<<<<<<< codex/translate-app-and-data-to-russian-ub1e0t
 
 By default, if you run the bootstrap command **from a folder named `www`**, it now installs directly into `www` (without creating `fallout-helper`).
 
+=======
+>>>>>>> main
 Install directly into the current `www` folder (no `fallout-helper/` subdirectory):
 
 ```bash
@@ -142,9 +145,12 @@ cp .env.example .env
 
 Then open `back/.env` and set `DATABASE_URL` for your PostgreSQL instance before running backend commands.
 
+<<<<<<< codex/translate-app-and-data-to-russian-ub1e0t
 If your DB password has special characters (`!`, `)`, `@`, `#`, etc.), URL-encode them in `DATABASE_URL`.
 Example: `!` -> `%21`, `)` -> `%29`, `@` -> `%40`, `#` -> `%23`.
 
+=======
+>>>>>>> main
 ---
 
 
