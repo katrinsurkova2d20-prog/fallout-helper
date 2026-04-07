@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO_URL="${1:-https://github.com/ReynierMatth/fallout2d20-helper.git}"
-TARGET_DIR="${2:-fallout2d20-helper}"
+REPO_URL="${1:-https://github.com/katrinsurkova2d20-prog/fallout-helper.git}"
+TARGET_DIR="${2:-fallout-helper}"
 
 if ! command -v git >/dev/null 2>&1; then
   echo "❌ git is required"

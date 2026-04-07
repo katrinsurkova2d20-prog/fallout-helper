@@ -27,7 +27,7 @@ The easiest way to run the app. No build required, just pull the official image.
 
 **1. Download the compose file**
 ```bash
-curl -O https://raw.githubusercontent.com/ReynierMatth/fallout2d20-helper/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/katrinsurkova2d20-prog/fallout-helper/main/docker-compose.yml
 ```
 
 **2. Start the app**
@@ -59,8 +59,8 @@ Edit `docker-compose.yml` and change `"3000:80"` to your desired port, e.g. `"80
 
 **1. Clone the repo**
 ```bash
-git clone https://github.com/ReynierMatth/fallout2d20-helper.git
-cd fallout2d20-helper
+git clone https://github.com/katrinsurkova2d20-prog/fallout-helper.git
+cd fallout-helper
 ```
 
 **2. Build and start**
@@ -74,13 +74,13 @@ Or run without Docker:
 
 ```bash
 # Download and run directly
-curl -fsSL https://raw.githubusercontent.com/ReynierMatth/fallout2d20-helper/main/scripts/bootstrap-hosting.sh | bash
+curl -fsSL https://raw.githubusercontent.com/katrinsurkova2d20-prog/fallout-helper/main/scripts/bootstrap-hosting.sh | bash
 ```
 
 Or with `wget`:
 
 ```bash
-wget -qO- https://raw.githubusercontent.com/ReynierMatth/fallout2d20-helper/main/scripts/bootstrap-hosting.sh | bash
+wget -qO- https://raw.githubusercontent.com/katrinsurkova2d20-prog/fallout-helper/main/scripts/bootstrap-hosting.sh | bash
 ```
 
 This command will:
