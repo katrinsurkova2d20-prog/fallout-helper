@@ -83,12 +83,24 @@ Or with `wget`:
 wget -qO- https://raw.githubusercontent.com/katrinsurkova2d20-prog/fallout-helper/main/scripts/bootstrap-hosting.sh | bash
 ```
 
+Install directly into the current `www` folder (no `fallout-helper/` subdirectory):
+
+```bash
+wget -qO- https://raw.githubusercontent.com/katrinsurkova2d20-prog/fallout-helper/main/scripts/bootstrap-hosting.sh | bash -s -- https://github.com/katrinsurkova2d20-prog/fallout-helper.git .
+```
+
+If `www` is not empty and you still want to overwrite files, add `FORCE_OVERWRITE=1`:
+
+```bash
+wget -qO- https://raw.githubusercontent.com/katrinsurkova2d20-prog/fallout-helper/main/scripts/bootstrap-hosting.sh | FORCE_OVERWRITE=1 bash -s -- https://github.com/katrinsurkova2d20-prog/fallout-helper.git .
+```
+
 This command will:
 1. Clone (or update) the repository.
 2. Run `scripts/setup-dev.sh`.
-3. Install backend/frontend dependencies.
-4. Run DB migrations and seeders.
-5. Create `back/.env` automatically if missing.
+3. Create `back/.env` automatically if missing.
+4. Stop once so you can set `DATABASE_URL` (first run only).
+5. On rerun: install dependencies, run DB migrations/seeders.
 
 `bootstrap-hosting.sh` works even if `git` is missing: it will download the source archive via `curl`/`wget` as a fallback.
 `setup-dev.sh` installs devDependencies too, and if hosting still forces production-only mode, it auto-installs required CLI tools (`drizzle-kit`, `tsx`) locally.

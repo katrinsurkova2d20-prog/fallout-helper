@@ -2,7 +2,7 @@
 set -euo pipefail
 
 REPO_URL="${1:-https://github.com/katrinsurkova2d20-prog/fallout-helper.git}"
-TARGET_DIR="${2:-fallout-helper}"
+TARGET_DIR="${2:-${TARGET_DIR:-fallout-helper}}"
 REPO_SLUG="${REPO_URL#https://github.com/}"
 REPO_SLUG="${REPO_SLUG%.git}"
 BRANCH="${BRANCH:-main}"
@@ -68,7 +68,42 @@ download_archive() {
   exit 1
 }
 
-if command -v git >/dev/null 2>&1; then
+prepare_target_dir() {
+  if [[ "$TARGET_DIR" != "." ]]; then
+    return 0
+  fi
+
+  if [[ "${FORCE_OVERWRITE:-0}" != "1" ]] && [[ -n "$(find . -mindepth 1 -maxdepth 1 -not -name '.well-known' -print -quit)" ]]; then
+    echo "❌ Current directory is not empty."
+    echo "   Use an empty www directory, or rerun with FORCE_OVERWRITE=1 to overwrite files in place."
+    exit 1
+  fi
+
+  echo "ℹ️ Target directory is current folder (.)"
+}
+
+extract_archive_to_target() {
+  local tmp_dir archive_path extracted_dir
+  tmp_dir="$(mktemp -d)"
+  archive_path="$tmp_dir/repo.tar.gz"
+  download_archive "$archive_path"
+
+  if [[ "$TARGET_DIR" == "." ]]; then
+    if [[ "${FORCE_OVERWRITE:-0}" == "1" ]]; then
+      find . -mindepth 1 -maxdepth 1 -not -name '.well-known' -exec rm -rf {} +
+    fi
+    tar -xzf "$archive_path" -C . --strip-components=1
+  else
+    extracted_dir="$tmp_dir/${REPO_SLUG##*/}-${BRANCH}"
+    tar -xzf "$archive_path" -C "$tmp_dir"
+    rm -rf "$TARGET_DIR"
+    mv "$extracted_dir" "$TARGET_DIR"
+  fi
+}
+
+prepare_target_dir
+
+if command -v git >/dev/null 2>&1 && [[ "$TARGET_DIR" != "." ]]; then
   if [[ -d "$TARGET_DIR/.git" ]]; then
     echo "🔄 Repository already exists, pulling latest changes..."
     git -C "$TARGET_DIR" pull --ff-only
@@ -77,19 +112,15 @@ if command -v git >/dev/null 2>&1; then
     git clone "$REPO_URL" "$TARGET_DIR"
   fi
 else
-  echo "ℹ️ git not found, downloading source archive..."
-  tmp_dir="$(mktemp -d)"
-  archive_path="$tmp_dir/repo.tar.gz"
-  download_archive "$archive_path"
-
-  extracted_dir="$tmp_dir/${REPO_SLUG##*/}-${BRANCH}"
-  tar -xzf "$archive_path" -C "$tmp_dir"
-
-  rm -rf "$TARGET_DIR"
-  mv "$extracted_dir" "$TARGET_DIR"
+  if [[ "$TARGET_DIR" == "." ]]; then
+    echo "ℹ️ Installing into current directory from source archive..."
+  else
+    echo "ℹ️ git not found, downloading source archive..."
+  fi
+  extract_archive_to_target
 fi
 
 ensure_node_tooling
 
 echo "🚀 Running setup script..."
-"$TARGET_DIR/scripts/setup-dev.sh"
+"${TARGET_DIR}/scripts/setup-dev.sh"
