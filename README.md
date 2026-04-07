@@ -27,7 +27,7 @@ The easiest way to run the app. No build required, just pull the official image.
 
 **1. Download the compose file**
 ```bash
-curl -O https://raw.githubusercontent.com/ReynierMatth/fallout2d20-helper/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/katrinsurkova2d20-prog/fallout-helper/main/docker-compose.yml
 ```
 
 **2. Start the app**
@@ -59,8 +59,8 @@ Edit `docker-compose.yml` and change `"3000:80"` to your desired port, e.g. `"80
 
 **1. Clone the repo**
 ```bash
-git clone https://github.com/ReynierMatth/fallout2d20-helper.git
-cd fallout2d20-helper
+git clone https://github.com/katrinsurkova2d20-prog/fallout-helper.git
+cd fallout-helper
 ```
 
 **2. Build and start**
@@ -69,6 +69,28 @@ docker compose -f docker-compose.yml up -d --build
 ```
 
 Or run without Docker:
+
+### Option A — automatic setup script (recommended on hosting/VPS)
+
+```bash
+# Download and run directly
+curl -fsSL https://raw.githubusercontent.com/katrinsurkova2d20-prog/fallout-helper/main/scripts/bootstrap-hosting.sh | bash
+```
+
+Or with `wget`:
+
+```bash
+wget -qO- https://raw.githubusercontent.com/katrinsurkova2d20-prog/fallout-helper/main/scripts/bootstrap-hosting.sh | bash
+```
+
+This command will:
+1. Clone (or update) the repository.
+2. Run `scripts/setup-dev.sh`.
+3. Install backend/frontend dependencies.
+4. Run DB migrations and seeders.
+5. Create `back/.env` automatically if missing.
+
+### Option B — manual commands
 
 ```bash
 # Backend
@@ -84,6 +106,20 @@ cd front
 npm install
 npm run dev
 ```
+
+### What does `cp .env.example .env` mean?
+
+- `cp` = copy file.
+- `.env.example` = template file with example environment variables.
+- `.env` = your local/private configuration file used by the backend.
+
+So this command creates your real config file from the template:
+
+```bash
+cp .env.example .env
+```
+
+Then open `back/.env` and set `DATABASE_URL` for your PostgreSQL instance before running backend commands.
 
 ---
 
