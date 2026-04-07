@@ -80,7 +80,11 @@ echo "📦 Installing frontend dependencies..."
 cd "$FRONT_DIR"
 npm install --include=dev
 
+echo "🏗️ Building frontend (creates front/dist)..."
+npm run build
+
 echo "✅ Setup complete."
-echo "Run in two terminals:"
+echo "Frontend build output: $FRONT_DIR/dist"
+echo "Run in two terminals (dev mode):"
 echo "  1) cd back && npx tsx src/index.ts"
 echo "  2) cd front && npm run dev"
