@@ -2,7 +2,14 @@
 set -euo pipefail
 
 REPO_URL="${1:-https://github.com/katrinsurkova2d20-prog/fallout-helper.git}"
-TARGET_DIR="${2:-${TARGET_DIR:-fallout-helper}}"
+TARGET_DIR_INPUT="${2:-${TARGET_DIR:-}}"
+if [[ -n "$TARGET_DIR_INPUT" ]]; then
+  TARGET_DIR="$TARGET_DIR_INPUT"
+elif [[ "$(basename "$PWD")" == "www" ]]; then
+  TARGET_DIR="."
+else
+  TARGET_DIR="fallout-helper"
+fi
 REPO_SLUG="${REPO_URL#https://github.com/}"
 REPO_SLUG="${REPO_SLUG%.git}"
 BRANCH="${BRANCH:-main}"

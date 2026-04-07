@@ -54,9 +54,22 @@ if [[ ! -x "$BACK_DIR/node_modules/.bin/drizzle-kit" || ! -x "$BACK_DIR/node_mod
 fi
 
 echo "🗄️ Running migrations..."
-if ! npm run db:migrate; then
+set +e
+migration_output="$(npm run db:migrate 2>&1)"
+migration_status=$?
+set -e
+echo "$migration_output"
+
+if [[ $migration_status -ne 0 ]]; then
   echo "❌ Migration failed."
-  echo "   If you see ECONNREFUSED 127.0.0.1:5432, your DATABASE_URL in back/.env is not pointing to your hosting PostgreSQL."
+  if echo "$migration_output" | grep -qiE '28P01|password authentication failed'; then
+    echo "   PostgreSQL auth failed (28P01). Check user/password in back/.env DATABASE_URL."
+    echo "   If password contains special chars like !, ), @, #, encode them in URL format (%21, %29, %40, %23)."
+  elif echo "$migration_output" | grep -q 'ECONNREFUSED'; then
+    echo "   Cannot connect to PostgreSQL host/port from DATABASE_URL. Verify host, port and firewall rules."
+  else
+    echo "   Verify DATABASE_URL in back/.env and test credentials with your hosting panel/client."
+  fi
   exit 1
 fi
 
