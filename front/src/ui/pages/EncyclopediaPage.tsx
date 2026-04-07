@@ -480,7 +480,7 @@ export function EncyclopediaPage() {
             <p className="text-red-500 font-medium">{t('common.error')}</p>
             <p className="text-vault-yellow-dark text-sm">{error}</p>
             <p className="text-vault-yellow-dark text-xs">
-              Assurez-vous que le backend est démarré sur http://localhost:3001
+              Assurez-vous que le backend est démarré et que /api est correctement configuré
             </p>
           </div>
         </Card>
